@@ -57,39 +57,21 @@
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
     <script>
-      const allKeys = Array.from(document.querySelectorAll(".key"));
-
-      allKeys.forEach((key) => {
-        key.addEventListener("transitionend", removeClassName);
+      // Remove playing styling after animation has finished
+      addEventListener("transitionend", (event) => {
+        event.target.classList.remove("playing");
       });
 
-      function removeClassName(e) {
-        console.log(e);
-        if (e.propertyName !== "transform") return;
-        e.target.classList.remove("playing");
+      function playSound(e) {
+        const audio = document.querySelector(`audio[data-key='${e.keyCode}']`);
+        audio.play();
+        audio.currentTime = 0;
+
+        const foundDiv = document.querySelector(`div[data-key='${e.keyCode}']`);
+        foundDiv.classList.add("playing");
       }
 
-      window.addEventListener(
-        "keydown",
-        function (event) {
-          console.log(event.keyCode);
-
-          let foundDiv = document.querySelector(
-            `div[data-key='${event.keyCode}']`
-          );
-
-          let foundAudio = document.querySelector(
-            `audio[data-key='${event.keyCode}']`
-          );
-          foundDiv.classList.add("playing");
-
-          foundAudio.currentTime = 0;
-          foundAudio.play();
-          // Cancel the default action to avoid it being handled twice
-          event.preventDefault();
-        },
-        true
-      );
+      window.addEventListener("keydown", playSound);
     </script>
   </body>
 </html>
