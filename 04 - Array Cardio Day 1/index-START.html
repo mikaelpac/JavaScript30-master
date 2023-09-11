@@ -83,12 +83,10 @@
       // Array.prototype.map()
       // 2. Give us an array of the inventors first and last names
 
-      let mappedArray = [];
-
-      inventors.map((inventor) => {
+      const mappedArray = inventors.map((inventor) => {
         const firstName = inventor.first;
         const lastName = inventor.last;
-        mappedArray.push(`${firstName} ${lastName}`);
+        return `${firstName} ${lastName}`;
       });
 
       console.log(mappedArray);
@@ -168,7 +166,6 @@
       ];
 
       const sumStrings = data.reduce((object, item) => {
-        console.log(object);
         if (!object[item]) {
           object[item] = 0;
         }
