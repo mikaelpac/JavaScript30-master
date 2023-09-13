@@ -20,44 +20,42 @@
 
       const cities = [];
 
-      const data = fetch(endpoint)
-        .then((res) => res.json())
-        .then((data) => {
-          cities.push(...data);
-        });
+      fetch(endpoint).then((response) => {
+        if (response) {
+          response.json().then((data) => {
+            cities.push(...data);
+          });
+        } else {
+          throw new Error("Something went wrong");
+        }
+      });
 
-      function findPlace(word, cities) {
+      function matchWord(wordToMatch, cities) {
         return cities.filter((place) => {
-          const regex = new RegExp(word, "gi");
+          const regex = new RegExp(wordToMatch, "gi");
           return place.city.match(regex) || place.state.match(regex);
         });
       }
 
-      function displayMatches() {
-        const matchesArray = findPlace(this.value, cities);
-        console.log(matchesArray);
-        const html = matchesArray
-          .map((match) => {
+      function displayResults() {
+        const results = matchWord(this.value, cities);
+
+        const html = results
+          .map((place) => {
             return `<li>
-                    <span class="name">${match.city}, ${match.state}</span>
-                    <span class="population">${match.population}</span>
-                  </li>`;
+                    <span>${place.city}, ${place.state}</span>
+                    <span>${place.population}</span>
+                    </li>`;
           })
           .join("");
         suggestions.innerHTML = html;
       }
 
-      const searchInput = document.querySelector(".search");
-      searchInput.addEventListener("change", displayMatches);
-      searchInput.addEventListener("keyup", displayMatches);
+      const input = document.querySelector(".search");
+      input.addEventListener("change", displayResults);
+      input.addEventListener("keyup", displayResults);
 
       const suggestions = document.querySelector(".suggestions");
     </script>
   </body>
 </html>
-
-<!-- if (res.status === 200) {
-  console.log("ok");
-  const data = await res.json();
-  cities.push(data);
-} -->
